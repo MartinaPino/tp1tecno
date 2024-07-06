@@ -34,7 +34,8 @@ function preload() {
 }
 
 function setup() {
-    createCanvas(600, 400);
+    select('body').style('background-color', 'rgb(205, 205, 205)');
+    createCanvas(900, 550);
     imageMode(CENTER);
 
     audioContext = getAudioContext();
@@ -73,15 +74,20 @@ function draw() {
     for (let i = 0; i < imagenesEnPantalla.length; i++) {
         let imagenActual = imagenesEnPantalla[i];
         
-        // Aplicar vibración solo si el estado es "vibrar" y hay sonido
         let posX = imagenActual.x;
         let posY = imagenActual.y;
+
+        // Aplicar vibración solo si el estado es "vibrar" y hay sonido
         if (estado === "vibrar" && haySonido) {
             let vibracionIntensidad = map(altura, FREC_MIN, FREC_MAX, 5, 20); // Ajustar el rango según lo necesites
             let vibracionX = random(-vibracionIntensidad, vibracionIntensidad); // Variación aleatoria en el eje x
             let vibracionY = random(-vibracionIntensidad, vibracionIntensidad); // Variación aleatoria en el eje y
             posX += vibracionX;
             posY += vibracionY;
+
+            // Actualizar las posiciones en el objeto de la imagen
+            imagenActual.x = posX;
+            imagenActual.y = posY;
         }
 
         push();
@@ -128,10 +134,10 @@ function reiniciarEstado() {
 function generarImagenes() {
     if (frameCount - ultimoTiempoGeneracion >= intervaloGeneracion) {
         console.log("Altura MIDI para generar imagen:", altura);
-        if (altura >= 75) { // A4 (MIDI 69) y superiores
+        if (altura >= 64) { // A4 (MIDI 69) y superiores
             console.log("Llamando a lineasRojas() porque altura es mayor o igual a 70");
             lineasRojas();
-        } else if (altura <= 58 && altura>=50) { // D#3 (MIDI 50) y inferiores
+        } else if (altura <= 54 && altura>=50) { // D#3 (MIDI 50) y inferiores
             console.log("Llamando a lineasNegras() porque altura es menor o igual a 50");
             lineasNegras();
         }
@@ -146,10 +152,10 @@ function elegirLineas() {
 
     if (empezoElSonido) {
         console.log("Empezó el sonido con altura MIDI:", altura);
-        if (altura >= 75) { // A4 (MIDI 69) y superiores
+        if (altura >= 64) { // A4 (MIDI 69) y superiores
             console.log("Llamando a lineasRojas() porque altura es mayor o igual a 70");
             lineasRojas();
-        } else if (altura <= 58 && altura>=50) {// D#3 (MIDI 50) y inferiores
+        } else if (altura <= 54 && altura>=50) {// D#3 (MIDI 50) y inferiores
             console.log("Llamando a lineasNegras() porque altura es menor o igual a 50");
             lineasNegras();
         }
@@ -200,7 +206,7 @@ function lineasNegras() {
     let originalWidth = trazos[indice].width;
     let originalHeight = trazos[indice].height;
     if (originalWidth && originalHeight) { // Verificar que las dimensiones originales existan
-        let newWidth = random(300, 550); // Ajustado para tamaños más pequeños
+        let newWidth = random(400, 650); // Ajustado para tamaños más pequeños
         let newHeight = originalHeight * (newWidth / originalWidth);
         let rotation = random(TWO_PI);
         let img = {
@@ -233,7 +239,7 @@ function lineasRojas() {
     let originalWidth = trazos[indice].width;
     let originalHeight = trazos[indice].height;
     if (originalWidth && originalHeight) { // Verificar que las dimensiones originales existan
-        let newWidth = random(300, 550); // Ajustado para tamaños más pequeños
+        let newWidth = random(400, 650); // Ajustado para tamaños más pequeños
         let newHeight = originalHeight * (newWidth / originalWidth);
         let rotation = random(TWO_PI);
         let img = {
